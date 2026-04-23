@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"os"
 
-	//"os"
-
 	hook "github.com/robotn/gohook"
 )
 
 func main() {
 	fmt.Println("Start Program")
-	file, err := os.Create("log.txt")
+
+	file, err := openLogFile()
 	if err != nil {
-	} //process error
+		fmt.Fprintf(os.Stderr, "failed to create log file: %v\n", err)
+	}
 	defer file.Close()
 
 	events := hook.Start()
