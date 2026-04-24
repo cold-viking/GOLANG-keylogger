@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	hook "github.com/robotn/gohook"
 )
@@ -13,14 +12,16 @@ const (
 	Space     = 32
 )
 
-func StartEventWriter() {
+func startEventWriter() (err error) {
 	file, err := openLogFile()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to create log file: %v\n", err)
+		return fmt.Errorf("open log file: %w", err)
 	}
 	defer file.Close()
 
 	events := hook.Start()
+	defer hook.End()
+
 	for ev := range events {
 
 		if ev.Kind == hook.KeyHold {
@@ -38,4 +39,5 @@ func StartEventWriter() {
 			}
 		}
 	}
+	return nil
 }
